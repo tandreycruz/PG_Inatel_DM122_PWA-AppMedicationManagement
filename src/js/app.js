@@ -1,9 +1,11 @@
 import HtmlService from "./HtmlService.js";
+import MedManService from "./MedManService.js";
 
 class App {
   constructor() {
     this.#registerServiceWorker();
-    window.htmlService = new HtmlService();
+    const medManService = new MedManService();
+    window.htmlService = new HtmlService(medManService);
   }
 
   #registerServiceWorker() {

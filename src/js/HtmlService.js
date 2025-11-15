@@ -1,8 +1,12 @@
 export default class HtmlService {
   #ul = null;
-  constructor() {
-    this.#formInitialization();
+  #medManService;
+
+  constructor(medManService) {
+    this.#medManService = medManService;
     this.#ul = document.querySelector("ul");
+    this.#formInitialization();
+    this.#listTasks();
   }
 
   #formInitialization() {
@@ -16,20 +20,30 @@ export default class HtmlService {
     });
   }
 
-  #addNewTask(task) {
-    console.log(`👁️ [HtmlService.js] adding new task: ${task}`);
-    const randomID = window.crypto.randomUUID();
+  async #listTasks() {
+    const tasks = await this.#medManService.getAll();
+    tasks.forEach((task) => this.#addTaskToDOM(task));
+  }
+
+  async #addNewTask(description) {
+    const newTask = await this.#medManService.save({ description });
+    if (newTask) this.#addTaskToDOM(newTask);
+  }
+
+  #addTaskToDOM(task) {
+    console.log(`👁️ [HtmlService.js] adding task to DOM: ${task.description}`);
     const taskHtml = `
-      <li id="${randomID}" onclick="this.classList.toggle('done')">
-        <span>${task}</span>
-        <button onclick="htmlService.deleteTask('${randomID}')">❌</button>
+      <li id="${task.id}" onclick="this.classList.toggle('done')">
+        <span>${task.description}</span>
+        <button onclick="htmlService.deleteTask(${task.id})">❌</button>
       </li>
     `;
     this.#ul.insertAdjacentHTML("beforeend", taskHtml);
   }
 
-  deleteTask(taskId) {
-    console.log(`👁️ [HtmlService.js] I was called to delete ${taskId}`);
-    document.getElementById(taskId).remove();
+  async deleteTask(taskId) {
+    console.log(`👁️ [HtmlService.js] deleting task with id ${taskId}`);
+    const isDeleted = this.#medManService.delete(taskId);
+    if (isDeleted) document.getElementById(taskId).remove();
   }
 }
