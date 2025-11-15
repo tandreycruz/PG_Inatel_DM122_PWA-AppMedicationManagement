@@ -51,7 +51,7 @@ export default class MedManService {
     };
     try {
       const savedId = await this.#db.medman.put(taskRecord);
-      console.log(`[MedManService.js] ${description} saved`);
+      console.log(`[MedManService.js] task ${description} saved`);
       return { id: savedId, ...taskRecord };
     } catch (error) {
       console.error(`Error when adding task: ${description}`, error);
@@ -64,7 +64,7 @@ export default class MedManService {
 
   async delete(taskId) {
     await this.#db.medman.delete(taskId);
-    console.log(`[MedManService.js] deleted ${taskId}`);
+    console.log(`[MedManService.js] Task with ID ${taskId} has been deleted`);
     return true;
   }
 }
