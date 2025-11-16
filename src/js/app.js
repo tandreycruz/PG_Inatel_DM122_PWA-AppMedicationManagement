@@ -14,7 +14,15 @@ class App {
       .register("./sw.js", { type: 'module' })
       .then(() => console.log(`👁️ [app.js] SW registered`))
       .catch(() => console.log(`👁️ [app.js] SW failed to register`));
-  }
+  }  
 }
 
 new App();
+
+window.openAbout = function () {
+  document.getElementById("about-modal").classList.remove("hidden");
+};
+
+window.closeAbout = function () {
+  document.getElementById("about-modal").classList.add("hidden");
+};

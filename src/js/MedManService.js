@@ -15,19 +15,22 @@ export default class MedManService {
     db.version(1).stores({
         medman: "++id, description, dose, time, quantity",
     });
+    
     db.on("populate", async () => {
       //
     });
+    
     db.open();
     this.#db = db;
   }
 
-  async save({ description, dose, time, quantity, createdDate = new Date(), done = false }) {
+  async save({ id, description, dose, time, quantity, createdDate = new Date(), done = false }) {
     if (!description || !dose || !time || quantity == null) {
         console.error(`[MedManService.js] missing fields`);
         return;
     }
     const medRecord = {
+        id,
         description,
         dose,
         time,
