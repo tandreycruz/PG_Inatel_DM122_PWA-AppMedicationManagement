@@ -36,7 +36,7 @@ Aplicativo PWA com o objetivo de criar uma lista de medicações, suas respectiv
 
 <br><br>
 ### 💻 Linguagem:
-HTML, JavaScript
+HTML, JavaScript, CSS
 <br><br>
 
 ### 🛠️ IDE:
