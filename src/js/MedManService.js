@@ -13,48 +13,35 @@ export default class MedManService {
     console.log(`[MedManService.js] initializing DB`);
     const db = new Dexie(DB_KEY);
     db.version(1).stores({
-      medman: "++id",
+        medman: "++id, description, dose, time, quantity",
     });
     db.on("populate", async () => {
-      db.medman.bulkPut([
-        {
-          description: "Inzelm 20mg",
-          createdDate: new Date(),
-          done: false,
-        },
-        {
-          description: "Tolrest 25mg",
-          createdDate: new Date(),
-          done: true,
-        },
-        {
-          description: "Ancoron 100mg",
-          createdDate: new Date(),
-          done: false,
-        },
-      ]);
+      //
     });
     db.open();
     this.#db = db;
   }
 
-  async save({ description, createdDate = new Date(), done = false }) {
-    if (!description) {
-      console.error(`[MedManService.js] no description provided`);
-      return;
+  async save({ description, dose, time, quantity, createdDate = new Date(), done = false }) {
+    if (!description || !dose || !time || quantity == null) {
+        console.error(`[MedManService.js] missing fields`);
+        return;
     }
-    const taskRecord = {
-      description,
-      createdDate,
-      updatedDate: new Date(),
-      done,
+    const medRecord = {
+        description,
+        dose,
+        time,
+        quantity,
+        createdDate,
+        updatedDate: new Date(),
+        done,
     };
     try {
-      const savedId = await this.#db.medman.put(taskRecord);
-      console.log(`[MedManService.js] task ${description} saved`);
-      return { id: savedId, ...taskRecord };
+        const savedId = await this.#db.medman.put(medRecord);
+        console.log(`[MedManService.js] medication ${description} saved`);
+        return { id: savedId, ...medRecord };
     } catch (error) {
-      console.error(`Error when adding task: ${description}`, error);
+        console.error(`Error when saving medication: ${description}`, error);
     }
   }
 
@@ -62,9 +49,9 @@ export default class MedManService {
     return this.#db.medman.toArray();
   }
 
-  async delete(taskId) {
-    await this.#db.medman.delete(taskId);
-    console.log(`[MedManService.js] Task with ID ${taskId} has been deleted`);
+  async delete(medId) {
+    await this.#db.medman.delete(medId);
+    console.log(`[MedManService.js] Medication with ID ${medId} has been deleted`);
     return true;
   }
 }

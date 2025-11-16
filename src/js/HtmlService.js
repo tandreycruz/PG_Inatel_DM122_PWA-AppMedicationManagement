@@ -1,62 +1,71 @@
 export default class HtmlService {
   #ul = null;
   #medManService;
-  #tasks = new Map();
+  #medications = new Map();
 
   constructor(medManService) {
     this.#medManService = medManService;
     this.#ul = document.querySelector("ul");
     this.#formInitialization();
-    this.#listTasks();
+    this.#listMedications();
   }
 
   #formInitialization() {
-    const form = document.querySelector("form");
+    const form = document.querySelector("#med-form");
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      console.log(`👁️ [HtmlService.js] form trigged`);
-      this.#addNewTask(form.task.value);
+      const data = {
+        description: form.description.value,
+        dose: parseInt(form.dose.value),
+        time: form.time.value,
+        quantity: parseInt(form.quantity.value),
+      };
+      this.#addNewMedication(data);
       form.reset();
-      form.task.focus();
+      form.description.focus();
     });
   }
 
-  async #listTasks() {
-    const tasks = await this.#medManService.getAll();
-    tasks.forEach((task) => {
-      this.#tasks.set(task.id, task);
-      this.#addTaskToDOM(task);
+
+  async #listMedications() {
+    const meds = await this.#medManService.getAll();
+    meds.forEach((med) => {
+      this.#medications.set(med.id, med);
+      this.#addMedicationToDOM(med);
     });
   }
 
-  async #addNewTask(description) {
-    const newTask = await this.#medManService.save({ description });
-    if (newTask) this.#addTaskToDOM(newTask);
+  async #addNewMedication(medication) {
+    const newMed = await this.#medManService.save(medication);
+    if (newMed) this.#addMedicationToDOM(newMed);
   }
 
-  #addTaskToDOM(task) {
-    console.log(`👁️ [HtmlService.js] adding task to DOM: ${task.description}`);
-    const taskHtml = `
-      <li id="${task.id}" onclick="htmlService.updateTask(${task.id}, this)">
-        <span>${task.description}</span>
-        <button onclick="htmlService.deleteTask(${task.id})">❌</button>
+
+  #addMedicationToDOM(med) {
+    const medHtml = `
+      <li id="${med.id}" onclick="htmlService.updateMedication(${med.id}, this)">
+        <span>
+          <strong>${med.description}</strong><br>
+          Dose: ${med.dose} | Horário: ${med.time} | Qtde: ${med.quantity}
+        </span>
+        <button onclick="htmlService.deleteMedication(${med.id})">❌</button>
       </li>
     `;
-    this.#ul.insertAdjacentHTML("beforeend", taskHtml);
+    this.#ul.insertAdjacentHTML("beforeend", medHtml);
   }
 
-  async updateTask(taskId, element) {
-    const task = this.#tasks.get(taskId);
-    task.done = element.classList.toggle("done");
-    await this.#medManService.save(task);
+  async updateMedication(medId, element) {
+    const med = this.#medications.get(medId);
+    med.done = element.classList.toggle("done");
+    await this.#medManService.save(med);
     console.log(
-      `👁️ [HtmlService.js] task (${task.description}) has been deleted`
+      `👁️ [HtmlService.js] task (${med.description}) has been deleted`
     );
   }
 
-  async deleteTask(taskId) {
-    console.log(`👁️ [HtmlService.js] deleting task with id ${taskId}`);
-    const isDeleted = this.#medManService.delete(taskId);
-    if (isDeleted) document.getElementById(taskId).remove();
+  async deleteMedication(medId) {
+    console.log(`👁️ [HtmlService.js] deleting task with id ${medId}`);
+    const isDeleted = this.#medManService.delete(medId);
+    if (isDeleted) document.getElementById(medId).remove();
   }
 }

@@ -1,8 +1,6 @@
-import { mockProfileAPI } from "./src/js/mock-api.js";
-
-const cacheName = "app-shell-v4";
+const cacheName = "app-medicationmanagement-v1";
 const assetsToCache = [
-  "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
+  "https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css",
   "https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
   "https://fonts.gstatic.com/s/roboto/v49/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2",
   "https://fonts.gstatic.com/s/materialicons/v145/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2",
@@ -15,8 +13,8 @@ const assetsToCache = [
   "src/assets/js/material.min.js",
   "src/css/style.css",
   "src/js/app.js",
-  "src/js/mock-api.js",
-  "src/offline.html",
+  "src/js/HtmlService.js",
+  "src/js/MedManService.js",  
   "favicon.ico",
   "index.html",
   "/",

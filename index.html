@@ -31,11 +31,11 @@
         <header class="mdl-layout__header">
           <div class="mdl-layout__header-row">
             <!-- Title -->
-            <span class="mdl-layout-title">PWA - Medication Management</span>
+            <span class="mdl-layout-title">Medication Management</span>
           </div>
         </header>
         <div class="mdl-layout__drawer">
-          <span class="mdl-layout-title">PWA - Medication Management</span>
+          <span class="mdl-layout-title">Medication Management</span>
           <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="#">About</a>
           </nav>
@@ -44,16 +44,14 @@
           class="mdl-layout__content mat-typography"
           style="text-align: center"
         >
-          <form>
-            <input
-              type="text"
-              name="task"
-              placeholder="Type anything here"
-              autocomplete="off"
-              autofocus
-              required
-              pattern=".{3,}"
-            />
+          <form id="med-form" class="med-form">
+            <input type="text" name="description" placeholder="Description" autocomplete="off" required />
+            <input type="number" name="dose" placeholder="Daily Dose" autocomplete="off" min="1" required />
+            <input type="time" name="time" placeholder="Time" autocomplete="off" required />
+            <input type="number" name="quantity" placeholder="Current Quantity" autocomplete="off" min="0" required />
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+              Add Medication
+            </button>
           </form>
           <ul>
             <li hidden></li>
